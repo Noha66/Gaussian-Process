@@ -46,6 +46,9 @@ dfEnthalpy.drop(['NAME','SMILES','Boiling Point', 'Entropy' , 'Heat Capacity','M
 dfEnthalpy.dropna(subset = ["Standard Enthalpy"], inplace=True)
 print(dfEnthalpy.shape)
 
+# Drop columns with na
+dfEnthalpy.dropna(axis='columns', inplace=True)
+
 # Drop columns that have only a single value (variance = 0)
 count_unique = dfEnthalpy.apply(pd.Series.nunique)
 cols_to_drop = count_unique[count_unique == 1].index
@@ -65,6 +68,9 @@ dfHeatCapacity.drop(['NAME','SMILES','Boiling Point', 'Entropy' , 'Standard Enth
 # Drop rows with na
 dfHeatCapacity.dropna(subset = ["Heat Capacity"], inplace=True)
 print(dfHeatCapacity.shape)
+
+# Drop columns with na
+dfHeatCapacity.dropna(axis='columns', inplace=True)
 
 # Drop columns that have only a single value (variance = 0)
 count_unique = dfHeatCapacity.apply(pd.Series.nunique)
@@ -86,6 +92,9 @@ dfEntropy.drop(['NAME','SMILES','Boiling Point', 'Heat Capacity' , 'Standard Ent
 dfEntropy.dropna(subset = ["Entropy"], inplace=True)
 print(dfEntropy.shape)
 
+# Drop columns with na
+dfEntropy.dropna(axis='columns', inplace=True)
+
 # Drop columns that have only a single value (variance = 0)
 count_unique = dfEntropy.apply(pd.Series.nunique)
 cols_to_drop = count_unique[count_unique == 1].index
@@ -106,6 +115,9 @@ dfBoiling.drop(['NAME','SMILES','Melting Point', 'Standard Enthalpy' , 'Entropy'
 dfBoiling.dropna(subset = ["Boiling Point"], inplace=True)
 print(dfBoiling.shape)
 
+# Drop columns with na
+dfBoiling.dropna(axis='columns', inplace=True)
+
 # Drop columns that have only a single value (variance = 0)
 count_unique = dfBoiling.apply(pd.Series.nunique)
 cols_to_drop = count_unique[count_unique == 1].index
@@ -125,6 +137,9 @@ dfMelting.drop(['NAME','SMILES','Boiling Point', 'Standard Enthalpy' , 'Entropy'
 # Drop rows with na
 dfMelting.dropna(subset = ["Melting Point"], inplace=True)
 print(dfMelting.shape)
+
+# Drop columns with na
+dfMelting.dropna(axis='columns', inplace=True)
 
 # Drop columns that have only a single value (variance = 0)
 count_unique = dfMelting.apply(pd.Series.nunique)
