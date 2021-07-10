@@ -18,11 +18,12 @@ from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.metrics import r2_score
 import warnings
 warnings.filterwarnings("ignore")
-from sklearn.gaussian_process.kernels import RBF, Sum, ConstantKernel, Matern, WhiteKernel, DotProduct as C
+from sklearn.gaussian_process.kernels import ConstantKernel as C
+from sklearn.gaussian_process.kernels import RBF, Sum, Matern, WhiteKernel, DotProduct
 
 
 # set seed
-SEED = 213
+SEED = 123
 
 # read data
 data = pd.read_csv('CyclicEntropyProcessed.csv')
@@ -30,7 +31,7 @@ data = pd.read_csv('CyclicEntropyProcessed.csv')
 # separate data into train and test
 X_train, X_test, y_train, y_test = train_test_split(data.drop(columns=['Entropy']), # X: Remove the target label column and ID (not needed)
                                                     data['Entropy'], # y: Read the target label alone
-                                                    test_size=0.2, # 20% testing, 80% training (we can change the size)
+                                                    test_size=0.3, # 30% testing, 70% training (we can change the size)
                                                 random_state=SEED) # Fix the seed to the random generator
 # str.encode().decode()
 print(f"Shape of training features {X_train.shape}")
@@ -38,17 +39,16 @@ print(f"Shape of test features {X_test.shape}")
 
 # Instantiate a Gaussian Process model
 
-kernel = 1.0 * Matern(length_scale=1.0, nu=1.5)
-gp = GaussianProcessRegressor(kernel=kernel,random_state=0)
-# R seq = 0.83 at seed 213
+kernel = Sum(C(2), RBF())
+gp = GaussianProcessRegressor(kernel=kernel, n_restarts_optimizer=0)
 
-# kernel = Sum(C(2), RBF())
-# gp = GaussianProcessRegressor(kernel=kernel, n_restarts_optimizer=0)
+# kernel = 1.0 * Matern(length_scale=1.0, nu=1.5)
+# gp = GaussianProcessRegressor(kernel=kernel,random_state=0)
 
 # kernel = DotProduct() + WhiteKernel(noise_level=0.5)
 # gp = GaussianProcessRegressor(kernel=kernel,random_state=0)
 
-# kernel = RBF() + ConstantKernel(constant_value=2)
+# kernel = RBF() + C(constant_value=2)
 # gp = GaussianProcessRegressor(kernel=kernel, alpha=5,random_state=0)
 
 # kernel = 1.0 * RBF(1.0)

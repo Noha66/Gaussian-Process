@@ -22,14 +22,14 @@ from sklearn.gaussian_process.kernels import RBF, Sum, Matern, WhiteKernel, DotP
 
 
 # set seed
-SEED = 171
+SEED = 123
 
 data = pd.read_csv('CyclicEnthalpyProcessed.csv')
 
 # separate data into train and test
 X_train, X_test, y_train, y_test = train_test_split(data.drop(columns=['Standard Enthalpy']), # X: Remove the target label column and ID (not needed)
                                                     data['Standard Enthalpy'], # y: Read the target label alone
-                                                    test_size=0.2, # 20% testing, 80% training (we can change the size)
+                                                    test_size=0.1, # 10% testing, 90% training (we can change the size)
                                                 random_state=SEED) # Fix the seed to the random generator
 # str.encode().decode()
 print(f"Shape of training features {X_train.shape}")
@@ -37,12 +37,11 @@ print(f"Shape of test features {X_test.shape}")
 
 # Instantiate a Gaussian Process model
 
+kernel = DotProduct() + WhiteKernel(noise_level=0.5)
+gp = GaussianProcessRegressor(kernel=kernel,random_state=0)
 
-
-kernel = C(1.0, (1e-3, 1e3)) * RBF(10, (1e-2, 1e2))
-gp =  GaussianProcessRegressor(kernel=kernel,random_state=0)
-
-# R seq = 0.71 at seed 171
+# kernel = C(1.0, (1e-3, 1e3)) * RBF(10, (1e-2, 1e2))
+# gp =  GaussianProcessRegressor(kernel=kernel,random_state=0)
 
 # kernel = Sum(C(2), RBF())
 # gp = GaussianProcessRegressor(kernel=kernel, n_restarts_optimizer=0)
@@ -50,10 +49,7 @@ gp =  GaussianProcessRegressor(kernel=kernel,random_state=0)
 # kernel = 1.0 * Matern(length_scale=1.0, nu=1.5)
 # gp = GaussianProcessRegressor(kernel=kernel,random_state=0)
 
-# kernel = DotProduct() + WhiteKernel(noise_level=0.5)
-# gp = GaussianProcessRegressor(kernel=kernel,random_state=0)
-
-# kernel = RBF() + ConstantKernel(constant_value=2)
+# kernel = RBF() + C(constant_value=2)
 # gp = GaussianProcessRegressor(kernel=kernel, alpha=5,random_state=0)
 
 # kernel = 1.0 * RBF(1.0)
